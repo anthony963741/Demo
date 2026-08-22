@@ -1,4 +1,20 @@
 services:
+  app:
+    build: .
+    # 想測試 Docker Hub 上實際 push 的版本，把上面這行換成：
+    # image: anthony963741/demo:latest
+    container_name: demo-app
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/demo_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Taipei&characterEncoding=UTF-8
+      SPRING_DATASOURCE_USERNAME: demo_user
+      SPRING_DATASOURCE_PASSWORD: demo_pass
+    ports:
+      - "8080:8080"
+
   mysql:
     image: mysql:8.0
     container_name: demo-mysql
